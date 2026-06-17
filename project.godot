@@ -21,6 +21,7 @@ SceneBridge="*res://scripts/core/scene_bridge.gd"
 HomeDeviceController="*res://scripts/core/home_device_controller.gd"
 HermesOSKernel="*res://addons/hermes_os/scripts/hermes/hermes_os_kernel.gd"
 McpInteractionServer="*res://addons/hermes_os/scripts/hermes/mcp_interaction_server.gd"
+MCPRuntime="*uid://dfsb75frjqqql"
 
 [display]
 
@@ -34,7 +35,7 @@ window/size/min_height=450
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/hermes_os/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg", "res://addons/hermes_os/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
 
 [physics]
 
