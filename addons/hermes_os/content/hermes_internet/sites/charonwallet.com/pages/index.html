@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Charon Wallet</title>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; margin: 0; background: #0f1118; color: #ecedf3; }
+    main { max-width: 880px; margin: 0 auto; padding: 24px; }
+    section { background: #181d2d; border: 1px solid #2f3958; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .balance { color: #98ffc1; font-weight: 700; }
+    .muted { color: #b8c0e0; }
+    .locked { color: #ffd18f; }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Charon Wallet</h1>
+      <p class="muted">Escrow rails and payment logs for WorldWeb traders.</p>
+      <p class="balance">Current Balance: 250 H-Cred</p>
+      <p>Obols Reserve: 0 (teaser currency not enabled on public routes)</p>
+    </section>
+
+    <section>
+      <h2>Recent Transaction Templates</h2>
+      <ul>
+        <li>Escrow hold initialized for marketplace order.</li>
+        <li>Seller payout release pending receipt confirmation.</li>
+        <li>Dispute window: 24 in-world hours after delivery mark.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>StyxNet Tier</h2>
+      <p class="locked">StyxNet support locked. Charon relay keys + Obol balance required for hidden channels.</p>
+    </section>
+  </main>
+</body>
+</html>

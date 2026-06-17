@@ -1,0 +1,9 @@
+import App from './App.svelte';
+
+const app = new App({
+  target: document.getElementById('app')
+});
+
+window.__AGORA_MARKET_BOOTED = true;
+
+export default app;

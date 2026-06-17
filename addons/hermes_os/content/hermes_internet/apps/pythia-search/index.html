@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pythia Search</title>
+    <style>
+      body { margin: 0; background: #0a101d; color: #e8ecf8; font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif; }
+      * { box-sizing: border-box; }
+      main { max-width: 900px; margin: 0 auto; padding: 28px 18px 40px; }
+      .brand { color: #f6f8ff; text-decoration: none; font-weight: 700; font-size: 1.1rem; }
+      form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+      input { width: 100%; border: 1px solid #334a82; background: #121b30; color: #f4f6fd; border-radius: 10px; padding: 11px 12px; font-size: 1rem; }
+      input:focus, button:focus, a:focus { outline: 2px solid #6f96ff; outline-offset: 1px; }
+      button { border: 1px solid #4a6fd0; background: #2a4181; color: #f6f8ff; border-radius: 10px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+      .hero { min-height: calc(100vh - 120px); text-align: center; display: grid; align-content: center; justify-items: center; gap: 14px; }
+      .hero-form { width: min(100%, 640px); }
+      .results-header { display: grid; gap: 12px; margin-bottom: 18px; }
+      .results-form { max-width: 640px; }
+      h1 { margin: 0; font-size: 2rem; }
+      p { margin: 0; color: #c5d0ee; line-height: 1.45; }
+      .results-head { margin-bottom: 14px; display: grid; gap: 6px; }
+      .results-list { display: grid; gap: 10px; }
+      article { border: 1px solid #283c6d; background: #111a2d; border-radius: 12px; padding: 12px; }
+      .top-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .type { font-size: 0.78rem; color: #b8c9f5; }
+      .url { color: #9cb6f5; text-decoration: none; font-size: 0.87rem; }
+      h2 { margin: 6px 0; font-size: 1.04rem; }
+      h2 a { color: #eef3ff; text-decoration: none; }
+      .empty { margin-top: 10px; }
+      .status { margin-top: 8px; color: #9cb6f5; font-size: 0.9rem; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      input::selection, input::-moz-selection {
+        background: #6f96ff;
+        color: #0a101d;
+      }
+      input {
+        user-select: text;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="pythia-search-root">
+      <section class="hero" id="search-hero">
+        <a class="brand" href="./">Pythia Search</a>
+        <h1>Search WorldWeb</h1>
+        <form class="hero-form" id="search-form">
+          <label class="sr-only" for="search-input">Search WorldWeb</label>
+          <input id="search-input" type="search" placeholder="Search WorldWeb" autocomplete="off" />
+          <button id="search-button" type="submit">Search</button>
+        </form>
+        <p>Search indexed WorldWeb sites, pages, and marketplace listings.</p>
+      </section>
+      <section id="results-region" style="display: none;">
+        <header class="results-header">
+          <a class="brand" href="./">Pythia Search</a>
+          <form class="results-form" id="search-form-results">
+            <label class="sr-only" for="search-input-results">Search WorldWeb</label>
+            <input id="search-input-results" type="search" placeholder="Search WorldWeb" autocomplete="off" />
+            <button id="search-button-results" type="submit">Search</button>
+          </form>
+        </header>
+        <section class="results-head">
+          <h1>Results</h1>
+          <p id="results-count-text"></p>
+          <p id="search-status" class="status">Search ready</p>
+        </section>
+        <section id="search-results" class="results-list" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <div id="app"></div>
+
+    <script id="pythia-search-index" type="application/json">__PYTHIA_SEARCH_INDEX_JSON__</script>
+
+    <script>
+      (function () {
+        const TYPE_WEIGHT = { Site: 0, Page: 1, Listing: 2 };
+        const FIELD_WEIGHTS = {
+          title: 14,
+          domain: 12,
+          url: 10,
+          description: 8,
+          snippet: 5,
+          tags: 7,
+          keywords: 6,
+          headings: 6,
+          body: 4
+        };
+
+        function tokenize(text) {
+          return String(text || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+        }
+
+        function normalize(text) {
+          return String(text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+        }
+
+        function countTokenMatches(fieldText, terms) {
+          const tokens = tokenize(fieldText);
+          if (!tokens.length) return 0;
+          const tokenSet = new Set(tokens);
+          let matches = 0;
+          for (const term of terms) {
+            if (tokenSet.has(term)) matches += 1;
+          }
+          return matches;
+        }
+
+        function scoreEntry(entry, q) {
+          const terms = tokenize(q);
+          if (!terms.length) return 0;
+          const phrase = normalize(q);
+          const fields = {
+            title: entry.title,
+            domain: entry.domain,
+            url: entry.url,
+            description: entry.description,
+            snippet: entry.snippet,
+            tags: (entry.tags || []).join(' '),
+            keywords: (entry.keywords || []).join(' '),
+            headings: (entry.headings || []).join(' '),
+            body: entry.body || entry.snippet || ''
+          };
+
+          let score = 0;
+          for (const fieldName in FIELD_WEIGHTS) {
+            const weight = FIELD_WEIGHTS[fieldName];
+            const fieldText = normalize(fields[fieldName]);
+            if (!fieldText) continue;
+            if (fieldText.indexOf(phrase) !== -1) score += weight * 3;
+            const tokenMatches = countTokenMatches(fieldText, terms);
+            if (tokenMatches > 0) score += tokenMatches * weight;
+          }
+          return score;
+        }
+
+        function formatDisplayUrl(result) {
+          const fallback = (result && result.domain) || '';
+          if (!result || !result.url) return fallback;
+          try {
+            const parsed = new URL(result.url);
+            const path = (parsed.pathname || '') + (parsed.search || '') + (parsed.hash || '');
+            return parsed.host + path;
+          } catch (_error) {
+            return fallback || result.url;
+          }
+        }
+
+        function escapeHtml(value) {
+          return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function parseIndexEntries() {
+          const el = document.getElementById('pythia-search-index');
+          if (!el) return [];
+          try {
+            const parsed = JSON.parse(el.textContent || '{}');
+            return Array.isArray(parsed.entries) ? parsed.entries : [];
+          } catch (_error) {
+            return [];
+          }
+        }
+
+        const entries = parseIndexEntries();
+        const hero = document.getElementById('search-hero');
+        const resultsRegion = document.getElementById('results-region');
+        const resultsList = document.getElementById('search-results');
+        const countText = document.getElementById('results-count-text');
+        const statusText = document.getElementById('search-status');
+
+        const formHero = document.getElementById('search-form');
+        const inputHero = document.getElementById('search-input');
+        const buttonHero = document.getElementById('search-button');
+        const formResults = document.getElementById('search-form-results');
+        const inputResults = document.getElementById('search-input-results');
+        const buttonResults = document.getElementById('search-button-results');
+
+        function rankedResults(query) {
+          return entries
+            .map(function (entry) {
+              return { entry: entry, score: scoreEntry(entry, query) };
+            })
+            .filter(function (pair) {
+              return pair.score > 0;
+            })
+            .sort(function (a, b) {
+              if (b.score !== a.score) return b.score - a.score;
+              const typeDelta = (TYPE_WEIGHT[a.entry.type] ?? 99) - (TYPE_WEIGHT[b.entry.type] ?? 99);
+              if (typeDelta !== 0) return typeDelta;
+              return String(a.entry.title || '').localeCompare(String(b.entry.title || ''));
+            })
+            .map(function (pair) {
+              return pair.entry;
+            });
+        }
+
+        function renderResults(query) {
+          const trimmed = String(query || '').trim();
+          const results = trimmed ? rankedResults(trimmed) : [];
+
+          if (inputHero) inputHero.value = trimmed;
+          if (inputResults) inputResults.value = trimmed;
+
+          if (!trimmed) {
+            hero.style.display = '';
+            resultsRegion.style.display = 'none';
+            resultsList.innerHTML = '';
+            countText.textContent = '';
+            if (statusText) statusText.textContent = 'Search ready';
+          } else {
+            hero.style.display = 'none';
+            resultsRegion.style.display = '';
+            countText.textContent = '"' + trimmed + '" · ' + results.length + ' result' + (results.length === 1 ? '' : 's');
+            if (!results.length) {
+              resultsList.innerHTML = '<p class="empty">No results found for "' + escapeHtml(trimmed) + '".</p>';
+            } else {
+              resultsList.innerHTML = results.map(function (result) {
+                const title = escapeHtml(String(result.title || 'Untitled'));
+                const snippet = escapeHtml(String(result.snippet || result.description || ''));
+                const type = escapeHtml(String(result.type || 'Page'));
+                const href = escapeHtml(String(result.url || '#'));
+                const displayUrl = escapeHtml(formatDisplayUrl(result));
+                return '<article>' +
+                  '<div class="top-row">' +
+                    '<span class="type">' + type + '</span>' +
+                    '<a class="url" href="' + href + '">' + displayUrl + '</a>' +
+                  '</div>' +
+                  '<h2><a href="' + href + '">' + title + '</a></h2>' +
+                  '<p>' + snippet + '</p>' +
+                '</article>';
+              }).join('');
+            }
+            if (statusText) statusText.textContent = 'Search ready · ' + results.length + ' result' + (results.length === 1 ? '' : 's');
+          }
+
+          const params = new URLSearchParams(window.location.search);
+          if (trimmed) params.set('q', trimmed);
+          else params.delete('q');
+          const nextUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+          window.history.replaceState({}, '', nextUrl);
+
+          window.__PYTHIA_SEARCH_READY = true;
+          window.__PYTHIA_LAST_QUERY = trimmed;
+          window.__PYTHIA_RESULT_COUNT = results.length;
+        }
+
+        function submitFromInput(inputEl) {
+          renderResults((inputEl && inputEl.value) || '');
+          // Refocus the input after search so the user can type immediately
+          const activeInput = inputHero || inputResults;
+          if (activeInput) {
+            activeInput.focus();
+          }
+        }
+
+        if (formHero && inputHero) {
+          formHero.addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitFromInput(inputHero);
+          });
+          buttonHero.addEventListener('click', function (event) {
+            event.preventDefault();
+            submitFromInput(inputHero);
+          });
+        }
+
+        if (formResults && inputResults) {
+          formResults.addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitFromInput(inputResults);
+          });
+          buttonResults.addEventListener('click', function (event) {
+            event.preventDefault();
+            submitFromInput(inputResults);
+          });
+        }
+
+        window.addEventListener('popstate', function () {
+          const params = new URLSearchParams(window.location.search);
+          renderResults(params.get('q') || '');
+        });
+
+        const initialQuery = new URLSearchParams(window.location.search).get('q') || '';
+        renderResults(initialQuery);
+      })();
+    </script>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

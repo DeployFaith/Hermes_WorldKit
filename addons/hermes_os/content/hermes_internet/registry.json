@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "product": "Hermes Internet",
+  "default_domain": "home.hermes",
+  "sites": [
+    {
+      "domain": "home.hermes",
+      "title": "Hermes_OS",
+      "description": "The official Hermes_OS landing page for Hermes Internet.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html",
+        "/interactive": "pages/interactive.html",
+        "/games": "pages/games.html",
+        "/games/snake": "pages/games_snake.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "agoramarket.com",
+      "title": "Agora Market",
+      "description": "The public market of WorldWeb.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "charonwallet.com",
+      "title": "Charon Wallet",
+      "description": "H-Cred wallet and escrow placeholder for WorldWeb.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "athenatrust.org",
+      "title": "Athena Trust",
+      "description": "Seller reputation and verification index for public-market safety.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "oracleboard.net",
+      "title": "Oracle Board",
+      "description": "Rumors, tips, and leaks from across WorldWeb.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "aresmarket.com",
+      "title": "Ares Market",
+      "description": "Hidden marketplace access gate for StyxNet-only visitors.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    },
+    {
+      "domain": "pythia.com",
+      "title": "Pythia Search",
+      "description": "Search indexed WorldWeb sites, pages, and listings.",
+      "entry": "/",
+      "routes": {
+        "/": "pages/index.html"
+      },
+      "agent_visible": true
+    }
+  ]
+}

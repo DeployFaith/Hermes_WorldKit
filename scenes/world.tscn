@@ -1,0 +1,143 @@
+[gd_scene load_steps=10 format=3 uid="uid://worldkit_main_world"]
+
+[ext_resource type="Script" path="res://scripts/worldkit/environment/terrain_setup.gd" id="1_terrain_setup"]
+[ext_resource type="Script" path="res://scripts/worldkit/player/player_controller.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/worldkit/interaction/interaction_system.gd" id="3_interaction"]
+[ext_resource type="Script" path="res://scripts/worldkit/building/block_library.gd" id="4_block_library"]
+[ext_resource type="Script" path="res://scripts/worldkit/building/block_world.gd" id="5_block_world"]
+[ext_resource type="Script" path="res://scripts/worldkit/building/placement_controller.gd" id="6_placement"]
+[ext_resource type="Script" path="res://scripts/worldkit/building/world_generator.gd" id="7_world_generator"]
+[ext_resource type="Script" path="res://scripts/worldkit/environment/water_setup.gd" id="8_water_setup"]
+[ext_resource type="Script" path="res://scripts/worldkit/environment/environment_setup.gd" id="9_environment_setup"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.32
+height = 1.8
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_worldkit"]
+sky_top_color = Color(0.27, 0.56, 0.96, 1)
+sky_horizon_color = Color(0.82, 0.9, 0.98, 1)
+sky_curve = 0.12
+sky_energy_multiplier = 1.18
+ground_bottom_color = Color(0.34, 0.5, 0.68, 1)
+ground_horizon_color = Color(0.86, 0.9, 0.88, 1)
+ground_curve = 0.1
+
+[sub_resource type="Sky" id="Sky_worldkit"]
+sky_material = SubResource("ProceduralSkyMaterial_worldkit")
+
+[sub_resource type="Environment" id="Environment_worldkit"]
+background_mode = 2
+sky = SubResource("Sky_worldkit")
+ambient_light_source = 2
+ambient_light_color = Color(0.78, 0.84, 0.9, 1)
+ambient_light_sky_contribution = 0.32
+ambient_light_energy = 0.24
+tonemap_mode = 2
+tonemap_exposure = 1.02
+tonemap_white = 1.45
+ssao_enabled = true
+ssao_radius = 1.25
+ssao_intensity = 0.82
+fog_enabled = true
+fog_light_color = Color(0.93, 0.86, 0.74, 1)
+fog_light_energy = 0.24
+fog_sun_scatter = 0.18
+fog_density = 0.006
+fog_aerial_perspective = 0.62
+fog_sky_affect = 0.28
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+size = Vector2(2200, 2200)
+subdivide_width = 320
+subdivide_depth = 320
+
+[node name="World" type="Node3D"]
+
+[node name="TerrainSetup" type="Node" parent="."]
+script = ExtResource("1_terrain_setup")
+
+[node name="Water" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_water")
+script = ExtResource("8_water_setup")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.729537, 0, 0.683941, 0.51414, 0.65947, 0.548416, -0.451039, 0.751731, -0.481108, 0, 36, 0)
+light_color = Color(1, 0.91, 0.74, 1)
+light_energy = 1.35
+light_angular_distance = 0.22
+shadow_enabled = true
+shadow_bias = 0.035
+shadow_normal_bias = 0.75
+shadow_blur = 0.35
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 900.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_worldkit")
+script = ExtResource("9_environment_setup")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -420, 0, 0)
+script = ExtResource("2_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881898, 0, -0.25881898, 0.9659259, 0, 1.6, 0)
+current = true
+fov = 72.0
+far = 5000.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Camera3D"]
+target_position = Vector3(0, 0, -8)
+collide_with_areas = true
+collide_with_bodies = true
+
+[node name="InteractionSystem" type="Node" parent="."]
+script = ExtResource("3_interaction")
+raycast_path = NodePath("../Player/Camera3D/RayCast3D")
+prompt_label_path = NodePath("../HUD/PromptLabel")
+
+[node name="BlockLibrary" type="Node" parent="."]
+script = ExtResource("4_block_library")
+
+[node name="BlockWorld" type="Node3D" parent="."]
+script = ExtResource("5_block_world")
+
+[node name="PlacementController" type="Node" parent="."]
+script = ExtResource("6_placement")
+camera_path = NodePath("../Player/Camera3D")
+block_world_path = NodePath("../BlockWorld")
+selected_label_path = NodePath("../HUD")
+max_distance = 8.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="PromptLabel" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 650.0
+offset_bottom = 706.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 34
+text = "Press E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WorldGenerator" type="Node" parent="."]
+script = ExtResource("7_world_generator")
+block_world_path = NodePath("../BlockWorld")
+generate_on_ready = false
+
+[node name="Room" type="Node3D" parent="."]
+visible = false

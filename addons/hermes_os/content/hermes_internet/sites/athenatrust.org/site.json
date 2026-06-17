@@ -1,0 +1,10 @@
+{
+  "domain": "athenatrust.org",
+  "title": "Athena Trust",
+  "description": "Seller reputation and verification index for public-market safety.",
+  "entry": "/",
+  "routes": {
+    "/": "pages/index.html"
+  },
+  "agent_visible": true
+}

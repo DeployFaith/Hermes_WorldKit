@@ -1,0 +1,202 @@
+[gd_scene format=3 uid="uid://bc7b44yueqv5d"]
+
+[ext_resource type="PackedScene" uid="uid://cc2p0u2p5l5fu" path="res://scenes/objects/computer/desk_pc.tscn" id="3_deskpc"]
+[ext_resource type="PackedScene" path="res://scenes/objects/furniture/bed.tscn" id="4_bed"]
+[ext_resource type="PackedScene" uid="uid://cw44ipqre7paj" path="res://scenes/objects/furniture/bookcase.tscn" id="5_bookcase"]
+[ext_resource type="PackedScene" uid="uid://c2edll6thta6e" path="res://scenes/objects/devices/ceiling_light_3d.tscn" id="7_clight"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/rug.tscn" id="8_rug"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/coffee_mug.tscn" id="9_mug"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/phone.tscn" id="10_phone"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/picture_frame.tscn" id="12_frame"]
+[ext_resource type="PackedScene" uid="uid://eym8wap1a0fw" path="res://scenes/objects/decor/weight_bench.tscn" id="13_bench"]
+[ext_resource type="PackedScene" uid="uid://e5880w027oim" path="res://scenes/objects/decor/flatscreen_tv.tscn" id="14_tv"]
+[ext_resource type="PackedScene" uid="uid://c8gp6r0f0m8oy" path="res://scenes/objects/decor/chair.tscn" id="15_chair"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/mini_fridge.tscn" id="16_fridge"]
+[ext_resource type="PackedScene" path="res://scenes/objects/devices/desk_lamp_3d.tscn" id="17_lamp"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/wall_clock.tscn" id="18_clock"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/potted_plant.tscn" id="19_plant"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/game_controller.tscn" id="20_ctrl"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/poster.tscn" id="22_poster"]
+[ext_resource type="PackedScene" uid="uid://c1noghnwawsxl" path="res://scenes/objects/decor/keyboard_mouse.tscn" id="23_kbmouse"]
+[ext_resource type="PackedScene" path="res://scenes/objects/decor/nightstand.tscn" id="24_night"]
+
+[sub_resource type="ProceduralSkyMaterial" id="DaySkyMaterial"]
+sky_top_color = Color(0.35, 0.55, 0.85, 1)
+sky_horizon_color = Color(0.65, 0.75, 0.85, 1)
+ground_bottom_color = Color(0.15, 0.12, 0.1, 1)
+ground_horizon_color = Color(0.5, 0.55, 0.6, 1)
+
+[sub_resource type="Sky" id="NightSky"]
+sky_material = SubResource("DaySkyMaterial")
+
+[sub_resource type="Environment" id="RoomEnvironment"]
+background_mode = 2
+sky = SubResource("NightSky")
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.75, 0.85, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+tonemap_white = 6.0
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.07, 0.045, 0.028, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.18, 0.165, 0.145, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="MetalMaterial"]
+albedo_color = Color(0.05, 0.05, 0.06, 1)
+roughness = 0.45
+
+[node name="Room" type="Node3D" unique_id=17409955]
+
+[node name="DeskPC" parent="." unique_id=1300385383 instance=ExtResource("3_deskpc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006414652, -4.83253)
+
+[node name="Bed" parent="." unique_id=490070728 instance=ExtResource("4_bed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7653522, 0, -2.8)
+
+[node name="Bookcase" parent="." unique_id=73056058 instance=ExtResource("5_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, -3.78)
+
+[node name="CeilingLight" parent="." unique_id=1450813559 instance=ExtResource("7_clight")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9097335, 0.512877)
+
+[node name="Rug" parent="." unique_id=268445724 instance=ExtResource("8_rug")]
+transform = Transform3D(0.99999964, -0.00087980105, -6.9329562e-06, 0.00087980536, 0.9999994, 0.00062995806, 6.3687066e-06, -0.000629964, 0.99999976, 0, 0.115, -2.8740332)
+
+[node name="CoffeeMug" parent="." unique_id=626299889 instance=ExtResource("9_mug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31949395, 0.82, -3.5839074)
+
+[node name="Phone" parent="." unique_id=1186775407 instance=ExtResource("10_phone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58009875, 0.78, -3.332312)
+
+[node name="PictureFrame" parent="." unique_id=1905107151 instance=ExtResource("12_frame")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0494568, 1.879, -3.875)
+
+[node name="WeightBench" parent="." unique_id=1537345377 instance=ExtResource("13_bench")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.8612494, 0.11087257, 2.7876878)
+
+[node name="FlatscreenTV" parent="." unique_id=13399008 instance=ExtResource("14_tv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.7960134, 0.87918365, 3.7615879)
+
+[node name="Chair" parent="." unique_id=1516633193 instance=ExtResource("15_chair")]
+transform = Transform3D(-0.8140547, 0, 0.58078814, 0, 1, 0, -0.58078814, 0, -0.8140547, -0.5123417, 0.14636976, -2.5)
+
+[node name="MiniFridge" parent="." unique_id=1045225864 instance=ExtResource("16_fridge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1659889, 0.12924406, -3.5)
+
+[node name="DeskLamp" parent="." unique_id=64928091 instance=ExtResource("17_lamp")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 0.5375474, 0.775, -3.7632966)
+
+[node name="WallClock" parent="." unique_id=1097982865 instance=ExtResource("18_clock")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0037975311, 2.2, -3.88)
+
+[node name="PottedPlant" parent="." unique_id=610698250 instance=ExtResource("19_plant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6468725, 0.5160128, -3.6958504)
+
+[node name="PottedPlant" parent="PottedPlant" unique_id=1185208221 instance=ExtResource("19_plant")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7889948, 0.008034408, -0.04284954)
+
+[node name="GameController" parent="." unique_id=182679943 instance=ExtResource("20_ctrl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37545916, 0.78, -3.638321)
+
+[node name="Poster" parent="." unique_id=643591528 instance=ExtResource("22_poster")]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 2.7772493, 1.8, -3.886489)
+
+[node name="KeyboardMouse" parent="." unique_id=1225356398 instance=ExtResource("23_kbmouse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0039396286, 0.785, -3.4506536)
+
+[node name="Nightstand" parent="." unique_id=1932914358 instance=ExtResource("24_night")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.863625, 0, -3.731372)
+
+[node name="Nightstand" parent="Nightstand" unique_id=1122971244 instance=ExtResource("24_night")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.7716912, 0, -0.10981965)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=726250931]
+environment = SubResource("RoomEnvironment")
+
+[node name="Outdoor" type="Node3D" parent="." unique_id=2055181444]
+
+[node name="SkyLight" type="DirectionalLight3D" parent="Outdoor" unique_id=616790756]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 0)
+light_color = Color(0.9, 0.9, 1, 1)
+light_energy = 0.8
+
+[node name="RoomGeometry" type="Node3D" parent="." unique_id=635001564]
+
+[node name="Floor" type="CSGBox3D" parent="RoomGeometry" unique_id=1802397069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.001034379, -0.1, 0.003469944)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = SubResource("FloorMaterial")
+
+[node name="Ceiling" type="CSGBox3D" parent="RoomGeometry" unique_id=1139262921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1246414e-05, 3, -0.0059342384)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = SubResource("FloorMaterial")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomGeometry" unique_id=184103053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = SubResource("WallMaterial")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomGeometry" unique_id=97319863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = SubResource("WallMaterial")
+
+[node name="WindowHole" type="CSGBox3D" parent="RoomGeometry/LeftWall" unique_id=1410571800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+operation = 2
+size = Vector3(0.5, 1.3, 1.6)
+
+[node name="RightWall" type="CSGBox3D" parent="RoomGeometry" unique_id=947471125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = SubResource("WallMaterial")
+
+[node name="EntranceFillWallRight" type="CSGBox3D" parent="RoomGeometry/RightWall" unique_id=790796504]
+transform = Transform3D(1, 0, 0, 0, 1.0441606, 0, 0, 0, 1, -4.1129055, 0.013571262, 3.903697)
+use_collision = true
+size = Vector3(8.282959, 3, 0.4)
+material = SubResource("WallMaterial")
+
+[node name="RoomDoorHole" type="CSGBox3D" parent="RoomGeometry/RightWall/EntranceFillWallRight" unique_id=553125972]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.95770705, 0, 0, 0, 0.99999994, -0.06323814, -0.2482531, -0.18789911)
+operation = 2
+size = Vector3(1.2801514, 2.5, 2)
+
+[node name="WindowFrame_T" type="CSGBox3D" parent="RoomGeometry" unique_id=369034425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.914089, 2.13, -1)
+size = Vector3(0.08, 0.06, 1.62)
+material = SubResource("MetalMaterial")
+
+[node name="WindowFrame_B" type="CSGBox3D" parent="RoomGeometry" unique_id=159417887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.914089, 0.87, -1)
+size = Vector3(0.08, 0.06, 1.62)
+material = SubResource("MetalMaterial")
+
+[node name="WindowFrame_L" type="CSGBox3D" parent="RoomGeometry" unique_id=2004369734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.914089, 1.5, -1.78)
+size = Vector3(0.08, 1.26, 0.06)
+material = SubResource("MetalMaterial")
+
+[node name="WindowFrame_R" type="CSGBox3D" parent="RoomGeometry" unique_id=1302648880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.914089, 1.5, -0.22)
+size = Vector3(0.08, 1.26, 0.06)
+material = SubResource("MetalMaterial")
+
+[node name="Lights" type="Node3D" parent="." unique_id=183651676]
+
+[node name="AmbientLight" type="DirectionalLight3D" parent="Lights" unique_id=310406148]
+transform = Transform3D(0.86602527, -0.4095762, 0.2867884, 0, 0.5735765, 0.819152, -0.50000024, -0.7094063, 0.49673176, 0, 0, 0)
+visible = false
+light_color = Color(0.42, 0.48, 0.62, 1)
+light_energy = 0.18

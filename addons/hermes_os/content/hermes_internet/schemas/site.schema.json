@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deployfaith.github.io/world-web/schemas/site.schema.json",
+  "title": "World Web Site",
+  "type": "object",
+  "required": ["domain", "title", "description", "entry", "routes", "agent_visible"],
+  "properties": {
+    "domain": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "entry": { "type": "string", "pattern": "^/" },
+    "routes": {
+      "type": "object",
+      "propertyNames": { "pattern": "^/" },
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "agent_visible": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

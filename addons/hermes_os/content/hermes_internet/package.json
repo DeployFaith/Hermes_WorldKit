@@ -1,0 +1,32 @@
+{
+  "name": "world-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "worldweb:sites": "python3 tools/worldweb_site_pipeline.py list",
+    "worldweb:build": "python3 tools/worldweb_site_pipeline.py build-all",
+    "worldweb:export": "python3 tools/worldweb_site_pipeline.py export-all",
+    "worldweb:sync": "python3 tools/worldweb_site_pipeline.py sync-all",
+    "site:build-all": "npm run worldweb:build",
+    "site:export-all": "npm run worldweb:export",
+    "site:validate": "python3 tools/validate_world_web.py",
+    "site:check-generated": "git diff --quiet -- registry.json sites",
+    "site:check-js": "node --check apps/agora-market/vite.config.js && node --check apps/agora-market/src/main.js && node --check apps/agora-market/src/listings.js && node --check apps/pythia-search/vite.config.js && node --check apps/pythia-search/src/main.js && node --check sites/home.hermes/scripts/interactive_demo.js && node --check sites/home.hermes/scripts/snake.js && node --check sites/agoramarket.com/scripts/market.js",
+    "_agora:bundle": "npx vite build --config apps/agora-market/vite.config.js",
+    "_pythia:index": "python3 tools/build_search_index.py",
+    "_pythia:bundle": "npm run _pythia:index && npx vite build --config apps/pythia-search/vite.config.js",
+    "build:agora": "python3 tools/worldweb_site_pipeline.py build --site agora-market",
+    "export:agora": "python3 tools/worldweb_site_pipeline.py export --site agora-market",
+    "sync:agora": "python3 tools/worldweb_site_pipeline.py sync --site agora-market",
+    "build:pythia": "python3 tools/worldweb_site_pipeline.py build --site pythia-search",
+    "export:pythia": "python3 tools/worldweb_site_pipeline.py export --site pythia-search",
+    "sync:pythia": "python3 tools/worldweb_site_pipeline.py sync --site pythia-search",
+    "validate": "python3 tools/validate_world_web.py"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "svelte": "^4.2.19",
+    "vite": "^5.4.19"
+  }
+}

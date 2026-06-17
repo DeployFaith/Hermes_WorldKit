@@ -1,0 +1,10 @@
+{
+  "domain": "oracleboard.net",
+  "title": "Oracle Board",
+  "description": "Rumors, tips, and leaks from across WorldWeb.",
+  "entry": "/",
+  "routes": {
+    "/": "pages/index.html"
+  },
+  "agent_visible": true
+}

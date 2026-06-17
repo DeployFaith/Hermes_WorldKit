@@ -1,0 +1,10 @@
+{
+  "domain": "aresmarket.com",
+  "title": "Ares Market",
+  "description": "Hidden marketplace access gate for StyxNet-only visitors.",
+  "entry": "/",
+  "routes": {
+    "/": "pages/index.html"
+  },
+  "agent_visible": true
+}

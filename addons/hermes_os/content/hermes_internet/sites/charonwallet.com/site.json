@@ -1,0 +1,10 @@
+{
+  "domain": "charonwallet.com",
+  "title": "Charon Wallet",
+  "description": "H-Cred wallet and escrow placeholder for WorldWeb.",
+  "entry": "/",
+  "routes": {
+    "/": "pages/index.html"
+  },
+  "agent_visible": true
+}
